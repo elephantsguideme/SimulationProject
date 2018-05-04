@@ -4,33 +4,33 @@
 #include "BloodUnit.h"
 
 
-class TimeEvent :       //class derived from Event, still won't have objects directly
+class time_event :       //class derived from Event, still won't have objects directly
   public Event
 {
 public:
   void Execute() override=0;
   virtual void  schedule()=0;   //function planning event's future excecution 
-  int event_time_;
-  TimeEvent() = default;
-  virtual ~TimeEvent() = default;
+  int event_time;
+  time_event() = default;
+  virtual ~time_event() = default;
 };
 
 
 /**** different time events which will/may occur during simulation*****/
 
 
-class TePatientArrival :         
+class te_patient_arrival :         
   public Event
 {
 public:
-  TePatientArrival(BloodCentre* blood_c);
-  virtual ~TePatientArrival() = default;
+  te_patient_arrival(BloodCentre* blood_centre);
+  virtual ~te_patient_arrival() = default;
 
  void Execute() override;
  void schedule(int next_event_time);
- int event_time_;
+ int event_time;
 
- BloodCentre* blood_centre_;
+ BloodCentre* blood_centre;
                
   
   
@@ -38,18 +38,18 @@ public:
  };
 
 
-class TeBloodDonated :        
+class te_blood_donated :        
   public Event
 {
 public:
-   TeBloodDonated(BloodCentre* blood_c);
-  virtual ~TeBloodDonated() = default;
+   te_blood_donated(BloodCentre* blood_centre);
+  virtual ~te_blood_donated() = default;
 
   void Execute() override;
   void schedule(int next_event_time);
-  int event_time_;
+  int event_time;
 
-  BloodCentre* blood_centre_;
+  BloodCentre* blood_centre;
 
 
   
@@ -57,17 +57,19 @@ public:
 };
 
 
-class TeBloodExpired :         
+class te_blood_expired :         
   public Event
 {
 public:
-   TeBloodExpired(BloodUnit* blood_u);
-  virtual ~TeBloodExpired() = default;
+   te_blood_expired(BloodCentre* blood_centre);
+  virtual ~te_blood_expired() = default;
 
   void Execute() override;
-  int event_time;
+  void schedule(int next_event_time);
 
-  BloodUnit*     blood_unit_;    //pointer to the blood unit that will expire
+  int event_time;
+  BloodCentre* blood_centre;
+  
 
 
   

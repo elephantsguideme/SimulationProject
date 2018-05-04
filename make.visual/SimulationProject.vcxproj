@@ -121,6 +121,7 @@
     <ClCompile Include="..\source\main.cpp" />
     <ClCompile Include="..\source\Patient.cpp" />
     <ClCompile Include="..\source\TimeEvents.cpp" />
+    <ClCompile Include="..\source\Generators.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\source\BloodCentre.h" />
@@ -128,6 +129,7 @@
     <ClInclude Include="..\source\Event.h" />
     <ClInclude Include="..\source\Patient.h" />
     <ClInclude Include="..\source\TimeEvents.h" />
+    <ClInclude Include="..\source\Generators.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

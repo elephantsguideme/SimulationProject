@@ -32,12 +32,67 @@ kMaxAmountToResearch(jb_max)
 
 void BloodCentre::add_patient_to_queue(Patient* patient)
 {
-
-  std::cout << get_system_time()<<". Patient added to the queue\n";
-  
-  
-
   patients_queue_.push(patient);
+  std::cout << get_system_time()<<". Patient added to the queue. There are(is) "<< patients_queue_.size() <<" patients in line\n";
+  
+  
+
+  
+}
+
+void BloodCentre::add_blood_to_depot1(BloodUnit* blood_unit)
+{
+  blood_depot1_.push(blood_unit);
+  std::cout << get_system_time() << ". Blood added to the queue. There are(is) " << blood_depot1_.size()+blood_depot2_.size() << " blood units in depot\n";
+
+}
+
+void BloodCentre::add_blood_to_depot2(BloodUnit* blood_unit)
+{
+  blood_depot2_.push(blood_unit);
+  std::cout << get_system_time() << ". Blood added to the queue. There are(is) " << blood_depot1_.size() + blood_depot2_.size() << " blood units in depot\n";
+}
+
+int BloodCentre::get_blood_utilization_time()     //returns nearest time of blood utilization 
+{
+   if(blood_depot1_.empty())
+   {
+     if(blood_depot2_.empty()) return(-1);
+     return(blood_depot2_.front()->get_time_of_utilization());
+   }
+
+  if(blood_depot1_.front()->get_time_of_utilization() < blood_depot2_.front()->get_time_of_utilization())
+  {
+    return(blood_depot1_.front()->get_time_of_utilization());
+  }
+  return(blood_depot2_.front()->get_time_of_utilization());
+}
+
+int BloodCentre::get_amount_of_blood() const
+{
+  return  blood_depot1_.size() + blood_depot2_.size();
+}
+
+void BloodCentre::utilize_blood()      //destroys blood unit with lowest time_of_utilization value
+{
+
+  if (blood_depot1_.empty())
+  {
+    blood_depot2_.pop();
+    return;
+  }
+  if (blood_depot2_.empty())
+  {
+    blood_depot1_.pop();
+    return;
+  }
+  if (blood_depot1_.front()->get_time_of_utilization() < blood_depot2_.front()->get_time_of_utilization())
+  {
+    blood_depot1_.pop();
+    return;
+  }
+  blood_depot2_.pop();
+  
 }
 
 

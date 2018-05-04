@@ -1,8 +1,11 @@
 
 #include <iostream>
-
+#include <random>
 #include "BloodCentre.h"
 #include "TimeEvents.h"
+
+
+
 
 int main()
 {
@@ -12,14 +15,22 @@ int main()
   const int tu = 300; const int tb = 30; const int jb_min = 5; const int jb_max = 10;
   
 
-  BloodCentre BloodC(r,n,z,t1,t2,p,w,e,q,l,tu,tb,jb_min,jb_max);      //initializing main object which contains all elements of the system
-  BloodCentre* pBloodC = &BloodC;
-  
-  TePatientArrival* TePatientA = new TePatientArrival(pBloodC);
-  TePatientA->Execute();
-  TePatientA->Execute();
+  BloodCentre blood_centre(r,n,z,t1,t2,p,w,e,q,l,tu,tb,jb_min,jb_max);     
+  //initializing main object which contains all elements of the system
+  auto* p_blood_centre = &blood_centre;
 
-  std::cout << "Hello World\n";
+  auto* patient_arrival = new te_patient_arrival(p_blood_centre);
+  patient_arrival->Execute();
+ patient_arrival->Execute();
+  patient_arrival->Execute();
+
+  auto* blood_donated = new te_blood_donated(p_blood_centre);
+
+  blood_donated->Execute();
+  blood_donated->Execute();
+  blood_donated->Execute();
+
+ 
     int x;
     std::cin>>x;
     return 0;
