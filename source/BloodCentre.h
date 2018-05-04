@@ -18,23 +18,29 @@ public:
   ~BloodCentre()=default;        
 
 
-  int get_system_time() const { return system_time; };
+  int get_system_time() const { return system_time_; };
+  void set_system_time(const int next_system_time) { system_time_= next_system_time; };
+
   int get_patients_avg_time() const { return kPatientsAvgTime; };
   int get_expiration_time1() const { return kExpirationTime1; };
   int get_expiration_time2() const { return kExpirationTime2; };
-
   double get_needed_blood_avg_amount() const { return kNeededBloodAvgAmount; };
   int get_donors_avg_time() const { return kDonorsAvgTime; };
+  int get_blood_utilization_time();
+  int get_amount_of_blood_in_depot() const;
+  int get_amount_of_blood_needed();
+  bool is_queue_empty() const;
 
   void add_patient_to_queue(Patient* patient);
   void add_blood_to_depot1(BloodUnit* blood_unit);
   void add_blood_to_depot2(BloodUnit* blood_unit);
-  int get_blood_utilization_time();
-  int get_amount_of_blood() const;
+  
   void utilize_blood();
+  void remove_patient();
+
 
 private:
-  int system_time; // absolute system time (in "arbitrary time units")
+  int system_time_; // absolute system time (in "arbitrary time units")
 
   const int kMinimumBloodLevel;
   const int kNormalOrderAmount;

@@ -85,7 +85,7 @@ void te_blood_donated::schedule(const int next_event_time) {
 }
 
 
-void te_blood_expired::Execute()
+void te_blood_expired::Execute()     //destroys all expired blood units, checks new utilization time
 {
   auto units_utilized=0;
                      while(blood_centre->get_blood_utilization_time()== blood_centre->get_system_time())
@@ -93,13 +93,15 @@ void te_blood_expired::Execute()
                        blood_centre->utilize_blood();
                        units_utilized++;
                      }
- std::cout << blood_centre->get_system_time() << ". "<< units_utilized <<" units utilized. There are(is) " << blood_centre->get_amount_of_blood() << " blood units in depot\n";
-
+ std::cout <<"\n"<< blood_centre->get_system_time() << ". "<< units_utilized <<" unit(s) utilized. There are(is) " << blood_centre->get_amount_of_blood_in_depot() << " blood units in depot\n";
+ this->schedule();
 }
 
-void te_blood_expired::schedule(const int next_event_time)
+void te_blood_expired::schedule()
 {
-  this->event_time = next_event_time;
+  this->event_time = blood_centre->get_blood_utilization_time();
+  if (event_time < 0)std::cout << blood_centre->get_system_time() << ". Blood depot is empty\n";    // get_blood_utilization_time() returns -1
+  else std::cout << blood_centre->get_system_time() << ". Next blood will be utilized at " << event_time << "\n";
 
 }
 
