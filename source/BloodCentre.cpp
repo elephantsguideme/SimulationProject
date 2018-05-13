@@ -132,7 +132,7 @@ bool BloodCentre::get_order_flag(const bool emergency) const        //if flag is
 void BloodCentre::set_order_flag(const bool value, const bool emergency)
 {
   if (emergency) emergency_order_flag_ =value;
-  normal_order_flag_ = value;
+  else normal_order_flag_ = value;
 }
 
 

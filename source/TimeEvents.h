@@ -15,9 +15,12 @@ public:
 
   void Execute() override;
   void schedule();
+  int get_event_time() const { return event_time_; };
 
-  int event_time;
+ 
 private:
+  int event_time_;
+
   BloodCentre* blood_centre_;
 };
 
@@ -30,9 +33,11 @@ public:
 
  void Execute() override;
  void schedule(int next_event_time);
- int event_time;
+ int get_event_time() const { return event_time_; };
 
 private:
+  int event_time_;
+
  BloodCentre* blood_centre_;
  
   
@@ -50,9 +55,11 @@ public:
 
   void Execute() override;
   void schedule(int next_event_time);
-  int event_time;
+  int get_event_time() const { return event_time_; };
 
 private:
+  int event_time_;
+
   BloodCentre* blood_centre_;
   te_blood_expired* te_blood_expired_;
 
@@ -71,9 +78,11 @@ public:
 
   void Execute() override;
   void schedule(int next_event_time);
-  int event_time;
+  int get_event_time() const { return event_time_; };
+
 
   private:
+    int event_time_;
   BloodCentre* blood_centre_;
   te_blood_expired* te_blood_expired_;
 
@@ -88,14 +97,36 @@ public:
 
   void Execute() override;
   void schedule(int next_event_time);
-  int event_time;
+  int get_event_time() const { return event_time_; };
+
 
 private:
+  int event_time_;
+
   BloodCentre * blood_centre_;
   te_blood_expired* te_blood_expired_;
 
 };
 
 
-  
+class te_research :             
+  public Event
+{
+public:
+  explicit te_research(BloodCentre* blood_centre, te_blood_expired* te_blood_expired);
+  ~te_research() = default;
+
+  void Execute() override;
+  void schedule(int next_event_time);
+  int get_event_time() const { return event_time_; };
+
+
+private:
+  int event_time_;
+
+  BloodCentre * blood_centre_;
+  te_blood_expired* te_blood_expired_;
+
+};
+
 

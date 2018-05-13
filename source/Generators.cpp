@@ -42,4 +42,16 @@ int Generators::normal_distribution(const int avg_value, const double variance) 
   return value_from_rng;
 }
 
+int Generators::uniform_distribution(int lower_limit, int upper_limit) const
+{
+  std::default_random_engine rng(this->seed_);  //   constructing a random number generator engine from a seed
+
+  const std::uniform_int_distribution<int> distribution(lower_limit, upper_limit);
+
+  const auto value_from_rng =distribution(rng);
+
+
+  return value_from_rng;
+}
+
 

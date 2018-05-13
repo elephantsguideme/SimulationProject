@@ -13,27 +13,29 @@
 
 
 
-te_blood_expired::te_blood_expired(BloodCentre* blood_centre) : event_time(-1), blood_centre_(blood_centre) 
+te_blood_expired::te_blood_expired(BloodCentre* blood_centre) : event_time_(-1), blood_centre_(blood_centre) 
 {
 }
 
 
-te_patient_arrival::te_patient_arrival(BloodCentre* blood_centre)  : event_time(-1), blood_centre_(blood_centre)
+te_patient_arrival::te_patient_arrival(BloodCentre* blood_centre)  : event_time_(-1), blood_centre_(blood_centre)
   
 {
 }
-te_blood_donated::te_blood_donated(BloodCentre* blood_centre, ::te_blood_expired* te_blood_expired) : event_time(-1), blood_centre_(blood_centre), te_blood_expired_(te_blood_expired)
+te_blood_donated::te_blood_donated(BloodCentre* blood_centre, ::te_blood_expired* te_blood_expired) : event_time_(-1), blood_centre_(blood_centre), te_blood_expired_(te_blood_expired)
 {
 
 }
-te_normal_order_arrived::te_normal_order_arrived(BloodCentre* blood_centre, te_blood_expired* te_blood_expired)    : event_time(-1), blood_centre_(blood_centre), te_blood_expired_(te_blood_expired)
+te_normal_order_arrived::te_normal_order_arrived(BloodCentre* blood_centre, te_blood_expired* te_blood_expired)    : event_time_(-1), blood_centre_(blood_centre), te_blood_expired_(te_blood_expired)
 {
 }
-te_emergency_order_arrived::te_emergency_order_arrived(BloodCentre* blood_centre, te_blood_expired* te_blood_expired) : event_time(-1), blood_centre_(blood_centre), te_blood_expired_(te_blood_expired)
+te_emergency_order_arrived::te_emergency_order_arrived(BloodCentre* blood_centre, te_blood_expired* te_blood_expired) : event_time_(-1), blood_centre_(blood_centre), te_blood_expired_(te_blood_expired)
 {
 }
 
-
+te_research::te_research(BloodCentre* blood_centre, te_blood_expired* te_blood_expired) : event_time_(-1), blood_centre_(blood_centre), te_blood_expired_(te_blood_expired)
+{
+}
 
 
 
@@ -63,7 +65,7 @@ void te_patient_arrival::Execute() {        //Patient arrives, amount of blood n
 }                               
 
 void te_patient_arrival::schedule(const int next_event_time) {
-  this->event_time= next_event_time;
+  event_time_= next_event_time;
   std::cout << blood_centre_->get_system_time()<< ". Next patient will arrive at "<<next_event_time <<"\n";
 
 }
@@ -92,7 +94,7 @@ void te_blood_donated::Execute() {               //a blood unit is given, it's u
 }
 
 void te_blood_donated::schedule(const int next_event_time) {
-  this->event_time = next_event_time;
+  event_time_ = next_event_time;
   std::cout << blood_centre_->get_system_time() << ". Next donor will arrive at " << next_event_time << "\n";
 
 }
@@ -117,10 +119,10 @@ void te_blood_expired::Execute()     //destroys all expired blood units, checks 
 void te_blood_expired::schedule()
 {
 
-  this->event_time = blood_centre_->get_blood_utilization_time();
+  this->event_time_ = blood_centre_->get_blood_utilization_time();
   
-  if (event_time < 0)std::cout << blood_centre_->get_system_time() << ". Blood depot is empty\n";    // get_blood_utilization_time() returns -1
-  else std::cout << blood_centre_->get_system_time() << ". Next blood will be destroyed at " << event_time << "\n";
+  if (event_time_ < 0)std::cout << blood_centre_->get_system_time() << ". Blood depot is empty\n";    // get_blood_utilization_time() returns -1
+  else std::cout << blood_centre_->get_system_time() << ". Next unit will be destroyed at " << event_time_ << "\n";
 
 }
 
@@ -144,13 +146,13 @@ void te_normal_order_arrived::Execute()           //normal order arrives, blood 
   te_blood_expired_->schedule();
 
   blood_centre_->set_order_flag(false, false);
-  event_time = -1;
+  event_time_ = -1;
 }
 
 void te_normal_order_arrived::schedule(const int next_event_time)
 {
-  event_time = next_event_time;
-  std::cout << blood_centre_->get_system_time() << ". Order will arrive at "<< event_time <<"\n";
+  event_time_ = next_event_time;
+  std::cout << blood_centre_->get_system_time() << ". Order will arrive at "<< event_time_ <<"\n";
 }
 
 
@@ -173,11 +175,40 @@ void te_emergency_order_arrived::Execute()           //emergency order arrives, 
   te_blood_expired_->schedule();
 
   blood_centre_->set_order_flag(false, true);
-  event_time = -1;
+  event_time_ = -1;
 }
 
 void te_emergency_order_arrived::schedule(const int next_event_time)
 {
-  event_time = next_event_time;
-  std::cout << blood_centre_->get_system_time() << ". Order will arrive at " << event_time << "\n";
+  event_time_ = next_event_time;
+  std::cout << blood_centre_->get_system_time() << ". Order will arrive at " << event_time_ << "\n";
+}
+
+
+
+void te_research::Execute()  //some blood units are used for research, blood utilization time changes, flag is cleared,
+{
+  auto* generator = new Generators();
+  const auto amount_from_rng = generator->uniform_distribution(blood_centre_->get_min_to_research(), blood_centre_->get_max_to_research());
+  generator->~Generators();
+  int amount;
+  for(amount=0; amount<amount_from_rng; amount++)
+  {
+    blood_centre_->utilize_blood();
+  }
+  std::cout << blood_centre_->get_system_time() << ". " << amount << " units used for research \n"; 
+  std::cout << blood_centre_->get_system_time() << ". There are "<< blood_centre_->get_amount_of_blood_in_depot() << " units in depot \n";
+
+  te_blood_expired_->schedule();
+
+  blood_centre_->set_research_flag(false);
+  event_time_ = -1;
+}
+
+void te_research::schedule(const int next_event_time)
+{
+  event_time_ = next_event_time;
+  if(event_time_>0)
+  std::cout << blood_centre_->get_system_time() << ". Blood is planned to be used for research at " << event_time_ << "\n";
+
 }

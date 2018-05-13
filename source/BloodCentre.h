@@ -17,9 +17,8 @@ public:
   //creating main object characterized with given constants 
   ~BloodCentre()=default;        
 
-
+                                //getters
   int get_system_time() const { return system_time_; };
-  void set_system_time(const int next_system_time) { system_time_= next_system_time; };
 
   int get_patients_avg_time() const { return kPatientsAvgTime; };
   int get_expiration_time1() const { return kExpirationTime1; };
@@ -33,11 +32,23 @@ public:
   bool get_order_flag(bool emergency) const;
   int get_minimum_blood_level() const { return kMinimumBloodLevel; };
   int get_normal_order_amount()const { return kNormalOrderAmount; };
- const int get_normal_order_avg_time()const { return kNormalOrderAvgTime; };
+  int get_normal_order_avg_time()const { return kNormalOrderAvgTime; };
   int get_emergency_order_amount()const { return kEmergencyOrderAmount; };
- const double get_emergency_order_avg_time()const { return kEmergencyOrderAvgTime; };
- double get_emergency_order_time_var()const { return kEmergencyOrderTimeVar; };
+  int get_emergency_order_avg_time()const { return kEmergencyOrderAvgTime; };
+  double get_emergency_order_time_var()const { return kEmergencyOrderTimeVar; };
 
+   int get_time_to_research()const { return kTimeToResearch; };
+   int get_level_to_research()const { return kLevelToResearch; };
+   int get_min_to_research()const { return kMinAmountToResearch; };
+   int get_max_to_research()const { return kMaxAmountToResearch; };
+   bool get_research_flag() const { return research_flag_; };
+
+              //setters
+  void set_system_time(const int next_system_time) { system_time_ = next_system_time; };
+  void set_order_flag(bool value, bool emergency);
+  void set_research_flag(const bool value) { research_flag_=value ; };
+
+  //other functions
   void add_patient_to_queue(Patient* patient);
   void add_blood_to_depot1(BloodUnit* blood_unit);
   void add_blood_to_depot2(BloodUnit* blood_unit);
@@ -45,14 +56,14 @@ public:
   void utilize_blood();
   void remove_patient();
   void donate_blood();
-  void set_order_flag(bool value, bool emergency);
+ 
 
 
 private:
   int system_time_; // absolute system time (in "arbitrary time units")
   bool normal_order_flag_;
   bool emergency_order_flag_;
-
+  bool research_flag_;
 
   const int kMinimumBloodLevel;
   const int kNormalOrderAmount;

@@ -24,7 +24,10 @@ ce_emergency_order::ce_emergency_order(BloodCentre* blood_centre, ::te_emergency
 {
 }
 
-
+ce_research_level::ce_research_level(BloodCentre* blood_centre, te_research* te_research)  :
+  blood_centre_(blood_centre), te_research_(te_research)
+{
+}
 
 
 
@@ -57,7 +60,7 @@ void ce_blood_transfusion::Execute()
    }
    std::cout << "\n" << blood_centre_->get_system_time() << ". " << units_donated << " units transfused. There are " << blood_centre_->get_amount_of_blood_in_depot() << " blood units in depot\n";
    if (blood_centre_->get_amount_of_blood_needed())
-     std::cout << blood_centre_->get_system_time() << ". Patiens still needs "<< blood_centre_->get_amount_of_blood_needed()<<" units\n";
+     std::cout << blood_centre_->get_system_time() << ". Patient still needs "<< blood_centre_->get_amount_of_blood_needed()<<" units\n";
    else    {
   
   blood_centre_->remove_patient();
@@ -99,7 +102,7 @@ bool ce_emergency_order::condition_met() const
 
 }
 
-void ce_emergency_order::Execute()
+void ce_emergency_order::Execute()       //schedule emergency order, block future emergency orders
 {
   std::cout << "\n" << blood_centre_->get_system_time() << ". Emergency order for blood units sent\n";
 
@@ -114,3 +117,32 @@ void ce_emergency_order::Execute()
 
   blood_centre_->set_order_flag(true, true);
 }
+
+
+
+bool ce_research_level::condition_met() const
+{
+  if(blood_centre_->get_research_flag())    //if research is already planned chenk if it should be aborted
+  {
+    if (blood_centre_->get_amount_of_blood_in_depot() <= blood_centre_->get_level_to_research()) 
+    {       
+      std::cout << "\n" << blood_centre_->get_system_time() << ". There is no longer enough blood for research\n";
+      te_research_->schedule(-1);
+      blood_centre_->set_research_flag(false);      
+    }
+    return false;
+  }
+ 
+  {
+    return (blood_centre_->get_amount_of_blood_in_depot() > blood_centre_->get_level_to_research());
+  }
+}
+
+void ce_research_level::Execute()
+{                                             
+  te_research_->schedule(blood_centre_->get_system_time() + blood_centre_->get_time_to_research());
+  blood_centre_->set_research_flag(true);
+
+}
+
+

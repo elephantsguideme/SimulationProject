@@ -58,3 +58,20 @@ private:
   te_emergency_order_arrived* te_emergency_order_arrived_;
 
 };
+
+
+class ce_research_level :
+  public Event
+{
+public:
+  explicit ce_research_level(BloodCentre* blood_centre, te_research* te_research);
+  ~ce_research_level() = default;
+
+  bool condition_met() const;
+  void Execute() override;
+
+private:
+  BloodCentre * blood_centre_;
+  te_research* te_research_;
+
+};
