@@ -30,6 +30,13 @@ public:
   int get_amount_of_blood_in_depot() const;
   int get_amount_of_blood_needed();
   bool is_queue_empty() const;
+  bool get_order_flag(bool emergency) const;
+  int get_minimum_blood_level() const { return kMinimumBloodLevel; };
+  int get_normal_order_amount()const { return kNormalOrderAmount; };
+ const int get_normal_order_avg_time()const { return kNormalOrderAvgTime; };
+  int get_emergency_order_amount()const { return kEmergencyOrderAmount; };
+ const double get_emergency_order_avg_time()const { return kEmergencyOrderAvgTime; };
+ double get_emergency_order_time_var()const { return kEmergencyOrderTimeVar; };
 
   void add_patient_to_queue(Patient* patient);
   void add_blood_to_depot1(BloodUnit* blood_unit);
@@ -37,10 +44,15 @@ public:
   
   void utilize_blood();
   void remove_patient();
+  void donate_blood();
+  void set_order_flag(bool value, bool emergency);
 
 
 private:
   int system_time_; // absolute system time (in "arbitrary time units")
+  bool normal_order_flag_;
+  bool emergency_order_flag_;
+
 
   const int kMinimumBloodLevel;
   const int kNormalOrderAmount;
@@ -58,6 +70,7 @@ private:
   const int  kLevelToResearch;
   const int  kMinAmountToResearch;
   const int  kMaxAmountToResearch;
+
 
   std::queue<Patient*> patients_queue_;
   std::queue<BloodUnit*> blood_depot1_;

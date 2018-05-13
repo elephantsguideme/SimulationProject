@@ -17,10 +17,44 @@ public:
   bool condition_met() const;
   void Execute() override;
   
+private:
+  BloodCentre* blood_centre_;
+  te_blood_expired* te_blood_expired_;
 
-  BloodCentre* blood_centre;
-  te_blood_expired* te_blood_expired;
 
 
+};
+
+
+class ce_normal_order :
+  public Event
+{
+public:
+  explicit ce_normal_order(BloodCentre* blood_centre, te_normal_order_arrived* te_normal_order_arrived);
+  ~ce_normal_order() = default;
+
+  bool condition_met() const;
+  void Execute() override;
+
+private:
+  BloodCentre* blood_centre_;
+  te_normal_order_arrived* te_normal_order_arrived_;
+
+};
+
+
+class ce_emergency_order :
+  public Event
+{                                                                      
+public:
+  explicit ce_emergency_order(BloodCentre* blood_centre, te_emergency_order_arrived* te_emergency_order_arrived);
+  ~ce_emergency_order() = default;
+
+  bool condition_met() const;
+  void Execute() override;
+
+private:
+  BloodCentre* blood_centre_;
+  te_emergency_order_arrived* te_emergency_order_arrived_;
 
 };

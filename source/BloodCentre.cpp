@@ -33,7 +33,7 @@ kMaxAmountToResearch(jb_max)
 void BloodCentre::add_patient_to_queue(Patient* patient)
 {
   patients_queue_.push(patient);
-  std::cout << get_system_time()<<". Patient added to the queue. There are(is) "<< patients_queue_.size() <<" patient(s) in line\n";
+  std::cout << get_system_time()<<". Patient added to the queue. There are "<< patients_queue_.size() <<" patients in line\n";
   
   
 
@@ -43,14 +43,14 @@ void BloodCentre::add_patient_to_queue(Patient* patient)
 void BloodCentre::add_blood_to_depot1(BloodUnit* blood_unit)
 {
   blood_depot1_.push(blood_unit);
-  std::cout << get_system_time() << ". Blood added to the queue. There are(is) " << blood_depot1_.size()+blood_depot2_.size() << " blood unit(s) in depot\n";
+  //std::cout << get_system_time() << ". Blood added to the queue. There are " << blood_depot1_.size()+blood_depot2_.size() << " blood units in depot\n";
 
 }
 
 void BloodCentre::add_blood_to_depot2(BloodUnit* blood_unit)
 {
   blood_depot2_.push(blood_unit);
-  std::cout << get_system_time() << ". Blood added to the queue. There are(is) " << blood_depot1_.size() + blood_depot2_.size() << " blood unit(s) in depot\n";
+  std::cout << get_system_time() << ". Blood added to the queue. There are " << blood_depot1_.size() + blood_depot2_.size() << " blood units in depot\n";
 }
 
 int BloodCentre::get_blood_utilization_time()     //returns nearest time of blood utilization 
@@ -60,6 +60,10 @@ int BloodCentre::get_blood_utilization_time()     //returns nearest time of bloo
      if(blood_depot2_.empty()) return(-1);
      return(blood_depot2_.front()->get_time_of_utilization());
    }
+
+   if (blood_depot2_.empty())       return(blood_depot1_.front()->get_time_of_utilization());
+
+
 
   if(blood_depot1_.front()->get_time_of_utilization() < blood_depot2_.front()->get_time_of_utilization())
   {
@@ -109,7 +113,26 @@ void BloodCentre::utilize_blood()      //destroys blood unit with lowest time_of
 void BloodCentre::remove_patient()
 {
   patients_queue_.pop();
-  std::cout << get_system_time() << ". Patient removed from the queue. There are(is) " << patients_queue_.size() << " patient(s) in line\n";
+  std::cout << get_system_time() << ". Patient removed from the queue. There are " << patients_queue_.size() << " patients in line\n";
+}
+
+void BloodCentre::donate_blood()
+{
+  patients_queue_.front()->donate_blood();
+
+}
+
+bool BloodCentre::get_order_flag(const bool emergency) const        //if flag is set then the order is due
+                                                                    // if emergency = false then it is asking about normal order
+{
+  if (emergency)return emergency_order_flag_;
+  return  normal_order_flag_;
+}
+
+void BloodCentre::set_order_flag(const bool value, const bool emergency)
+{
+  if (emergency) emergency_order_flag_ =value;
+  normal_order_flag_ = value;
 }
 
 
