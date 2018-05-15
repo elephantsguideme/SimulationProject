@@ -40,7 +40,7 @@ bool ce_blood_transfusion::condition_met() const
 
 }
 
-void ce_blood_transfusion::Execute()
+void ce_blood_transfusion::execute()
 {
   /*
   const auto amount_of_blood_needed = blood_centre->get_amount_of_blood_needed();
@@ -78,7 +78,7 @@ bool ce_normal_order::condition_met() const
 
 }
                   
-void ce_normal_order::Execute()     //schedule normal order, block future normal orders
+void ce_normal_order::execute()     //schedule normal order, block future normal orders
 {
   std::cout << "\n" << blood_centre_->get_system_time() << ". Normal order for blood units sent\n";
 
@@ -102,7 +102,7 @@ bool ce_emergency_order::condition_met() const
 
 }
 
-void ce_emergency_order::Execute()       //schedule emergency order, block future emergency orders
+void ce_emergency_order::execute()       //schedule emergency order, block future emergency orders
 {
   std::cout << "\n" << blood_centre_->get_system_time() << ". Emergency order for blood units sent\n";
 
@@ -138,7 +138,7 @@ bool ce_research_level::condition_met() const
   }
 }
 
-void ce_research_level::Execute()
+void ce_research_level::execute()
 {                                             
   te_research_->schedule(blood_centre_->get_system_time() + blood_centre_->get_time_to_research());
   blood_centre_->set_research_flag(true);

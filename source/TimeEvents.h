@@ -13,7 +13,7 @@ public:
   explicit te_blood_expired(BloodCentre* blood_centre);
    ~te_blood_expired() = default;
 
-  void Execute() override;
+  void execute() override;
   void schedule();
   int get_event_time() const { return event_time_; };
 
@@ -31,7 +31,7 @@ public:
   explicit te_patient_arrival(BloodCentre* blood_centre);
    ~te_patient_arrival() = default;
 
- void Execute() override;
+ void execute() override;
  void schedule(int next_event_time);
  int get_event_time() const { return event_time_; };
 
@@ -53,7 +53,7 @@ public:
   explicit te_blood_donated(BloodCentre* blood_centre, te_blood_expired* te_blood_expired);
    ~te_blood_donated() = default;
 
-  void Execute() override;
+  void execute() override;
   void schedule(int next_event_time);
   int get_event_time() const { return event_time_; };
 
@@ -76,7 +76,7 @@ public:
   explicit te_normal_order_arrived(BloodCentre* blood_centre, te_blood_expired* te_blood_expired);
   ~te_normal_order_arrived() = default;
 
-  void Execute() override;
+  void execute() override;
   void schedule(int next_event_time);
   int get_event_time() const { return event_time_; };
 
@@ -95,7 +95,7 @@ public:
   explicit te_emergency_order_arrived(BloodCentre* blood_centre, te_blood_expired* te_blood_expired);
   ~te_emergency_order_arrived() = default;
 
-  void Execute() override;
+  void execute() override;
   void schedule(int next_event_time);
   int get_event_time() const { return event_time_; };
 
@@ -116,7 +116,7 @@ public:
   explicit te_research(BloodCentre* blood_centre, te_blood_expired* te_blood_expired);
   ~te_research() = default;
 
-  void Execute() override;
+  void execute() override;
   void schedule(int next_event_time);
   int get_event_time() const { return event_time_; };
 

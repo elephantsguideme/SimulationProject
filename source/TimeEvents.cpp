@@ -40,7 +40,7 @@ te_research::te_research(BloodCentre* blood_centre, te_blood_expired* te_blood_e
 
 
 
-void te_patient_arrival::Execute() {        //Patient arrives, amount of blood needed is generated, patient is put
+void te_patient_arrival::execute() {        //Patient arrives, amount of blood needed is generated, patient is put
                                           // on the end fo the waiting line, new patient's arrival is planned 
   
   auto* generator = new Generators();
@@ -74,7 +74,7 @@ void te_patient_arrival::schedule(const int next_event_time) {
 
 
 
-void te_blood_donated::Execute() {               //a blood unit is given, it's utilization is planned, 
+void te_blood_donated::execute() {               //a blood unit is given, it's utilization is planned, 
                                                 //it is added to depot, new donor's arrival is planned
 
   std::cout <<"\n"<< blood_centre_->get_system_time()<<". A unit of blood is given by donor\n";
@@ -104,7 +104,7 @@ void te_blood_donated::schedule(const int next_event_time) {
 
 
 
-void te_blood_expired::Execute()     //destroys all expired blood units, checks new utilization time
+void te_blood_expired::execute()     //destroys all expired blood units, checks new utilization time
 {
   auto units_utilized=0;
                      while(blood_centre_->get_blood_utilization_time()== blood_centre_->get_system_time())
@@ -129,7 +129,7 @@ void te_blood_expired::schedule()
 
 
 
-void te_normal_order_arrived::Execute()           //normal order arrives, blood utilization is planned, 
+void te_normal_order_arrived::execute()           //normal order arrives, blood utilization is planned, 
                                                 //units are added to depot, flag is cleared
 {                                                   
   
@@ -158,7 +158,7 @@ void te_normal_order_arrived::schedule(const int next_event_time)
 
 
 
-void te_emergency_order_arrived::Execute()           //emergency order arrives, blood utilization is planned, 
+void te_emergency_order_arrived::execute()           //emergency order arrives, blood utilization is planned, 
                                                   //units are added to depot, flag is cleared
 {
 
@@ -186,7 +186,7 @@ void te_emergency_order_arrived::schedule(const int next_event_time)
 
 
 
-void te_research::Execute()  //some blood units are used for research, blood utilization time changes, flag is cleared,
+void te_research::execute()  //some blood units are used for research, blood utilization time changes, flag is cleared,
 {
   auto* generator = new Generators();
   const auto amount_from_rng = generator->uniform_distribution(blood_centre_->get_min_to_research(), blood_centre_->get_max_to_research());

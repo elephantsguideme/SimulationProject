@@ -15,7 +15,7 @@ public:
   ~ce_blood_transfusion() = default;
 
   bool condition_met() const;
-  void Execute() override;
+  void execute() override;
   
 private:
   BloodCentre* blood_centre_;
@@ -34,7 +34,7 @@ public:
   ~ce_normal_order() = default;
 
   bool condition_met() const;
-  void Execute() override;
+  void execute() override;
 
 private:
   BloodCentre* blood_centre_;
@@ -51,7 +51,7 @@ public:
   ~ce_emergency_order() = default;
 
   bool condition_met() const;
-  void Execute() override;
+  void execute() override;
 
 private:
   BloodCentre* blood_centre_;
@@ -68,7 +68,7 @@ public:
   ~ce_research_level() = default;
 
   bool condition_met() const;
-  void Execute() override;
+  void execute() override;
 
 private:
   BloodCentre * blood_centre_;
