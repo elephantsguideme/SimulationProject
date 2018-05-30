@@ -1,57 +1,88 @@
 #include "Generators.h"
 #include <random>
 #include <chrono>
+#include <iostream>
+#include <math.h>
 
-
-Generators::Generators() : seed_(std::chrono::system_clock::now().time_since_epoch().count()) 
+Generators::Generators(int seed) : seed_(seed) 
 // geting time-based random seed
 {
     
 }
+Generators::Generators() : seed_(1)
+// geting time-based random seed
+{
 
-int Generators::exponential_distribution(const int avg_value) const
+}
+
+double Generators::uniform_01_distribution() 
 {
   
-  std::default_random_engine rng(this->seed_);  //   constructing a random number generator engine from a seed
-
-  const std::exponential_distribution<double> distribution(1.0 / avg_value);
-  const auto value_from_rng = static_cast<int>(distribution(rng));
-
-  return value_from_rng;
+  seed_ = (a * seed_)%m;
+  
+  double m_double = static_cast<double>(m);
+    
+  return static_cast<double> (seed_/ m_double);
 }
 
-int Generators::geometric_distribution(const double avg_value) const
+
+
+
+int Generators::exponential_distribution(const int avg_value) 
 {
-  std::default_random_engine rng(this->seed_);  //   constructing a random number generator engine from a seed
+  
+ double u = uniform_01_distribution();
 
-  const std::geometric_distribution<int> distribution(1.0 / avg_value);
-  const auto value_from_rng = distribution(rng);
-
-  return value_from_rng;
+  return -avg_value*log(u);
 }
 
-int Generators::normal_distribution(const int avg_value, const double variance) const
+int Generators::geometric_distribution(const double avg_value) 
 {
-  std::default_random_engine rng(this->seed_);  //   constructing a random number generator engine from a seed
+  double u = uniform_01_distribution();
+  int number_of_throws = 1;
+  double probability = 1 / avg_value;
+  while (u > probability) {
+    u= uniform_01_distribution();
+    number_of_throws++;
+  }
 
-  std::normal_distribution<double> distribution(avg_value, sqrt(variance));   // standard deviation = sqrt(variance)
-
-   const auto value_from_rng = static_cast<int> (distribution(rng));
-
-
-  return value_from_rng;
+  return number_of_throws;
 }
 
-int Generators::uniform_distribution(int lower_limit, int upper_limit) const
+double Generators::normal_01_distribution()
 {
-  std::default_random_engine rng(this->seed_);  //   constructing a random number generator engine from a seed
+  double normal = 0;
+     
+  for (int i = 0; i < 12; i++) {
+    normal += uniform_01_distribution();
+  }
+  normal -= 6;        
 
-  const std::uniform_int_distribution<int> distribution(lower_limit, upper_limit);
-
-  const auto value_from_rng =distribution(rng);
+ 
 
 
-  return value_from_rng;
+
+  return normal;
+}
+
+
+int Generators::normal_distribution(const int avg_value, const double variance) 
+{
+  double normal = normal_01_distribution();
+  double standard_dev = sqrt(variance);
+  
+
+
+  return static_cast<int>(normal*standard_dev+avg_value);
+}
+
+int Generators::uniform_distribution(const int lower_limit, const int upper_limit) 
+{
+  double u = uniform_01_distribution();
+  //u = u * (upper_limit - lower_limit) + lower_limit;       // version 1
+  u = u * (upper_limit + 1 - lower_limit) + lower_limit;
+
+  return static_cast<int> (u);
 }
 
 

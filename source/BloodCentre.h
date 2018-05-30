@@ -13,7 +13,7 @@ class BloodCentre
 {
 public:
   BloodCentre(int r, int n, int z, int t1, int t2, int p, double w,
-    int e, int q, int l, int tu, int tb, int jb_min, int jb_max);
+    int e,double ew2, int q, int l, int tu, int tb, int jb_min, int jb_max);
   //creating main object characterized with given constants 
   ~BloodCentre()=default;        
 
@@ -58,6 +58,18 @@ public:
   void donate_blood();
  
 
+  //statistics
+  int stat_amount_of_blood_transfused;
+  int stat_amount_of_blood_destroyed;
+  int stat_amount_of_blood_used_for_research;
+      
+  int stat_patients_arrived;
+  int stat_donors_arrived;
+  int stat_max_number_of_patients_in_queue;
+  int stat_normal_orders_sent;
+  int stat_emergency_orders_sent;
+  
+  void zero_all_stats();
 
 private:
   int system_time_; // absolute system time (in "arbitrary time units")

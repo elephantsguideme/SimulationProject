@@ -121,6 +121,7 @@
     <ClCompile Include="..\source\Event.cpp" />
     <ClCompile Include="..\source\main.cpp" />
     <ClCompile Include="..\source\Patient.cpp" />
+    <ClCompile Include="..\source\seeds.cpp" />
     <ClCompile Include="..\source\TimeEvents.cpp" />
     <ClCompile Include="..\source\Generators.cpp" />
   </ItemGroup>
@@ -132,6 +133,7 @@
     <ClInclude Include="..\source\Patient.h" />
     <ClInclude Include="..\source\TimeEvents.h" />
     <ClInclude Include="..\source\Generators.h" />
+    <ClInclude Include="..\source\seeds.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

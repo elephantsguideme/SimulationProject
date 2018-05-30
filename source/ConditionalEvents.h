@@ -2,6 +2,7 @@
 #include "Event.h"
 #include "BloodCentre.h"
 #include "TimeEvents.h"
+#include "Generators.h"
 
 
 
@@ -37,6 +38,7 @@ public:
   void execute() override;
 
 private:
+  Generators * generator_;
   BloodCentre* blood_centre_;
   te_normal_order_arrived* te_normal_order_arrived_;
 
@@ -54,6 +56,7 @@ public:
   void execute() override;
 
 private:
+  Generators * generator_;
   BloodCentre* blood_centre_;
   te_emergency_order_arrived* te_emergency_order_arrived_;
 

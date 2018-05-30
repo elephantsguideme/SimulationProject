@@ -5,6 +5,7 @@
 #include "BloodCentre.h"
 #include "Patient.h"
 #include "Generators.h"
+#include "seeds.h"
 
     
 // constructors 
@@ -17,11 +18,18 @@ ce_blood_transfusion::ce_blood_transfusion(BloodCentre* blood_centre, ::te_blood
 ce_normal_order::ce_normal_order(BloodCentre* blood_centre, ::te_normal_order_arrived* te_normal_order_arrived)  :
   blood_centre_(blood_centre), te_normal_order_arrived_(te_normal_order_arrived)
 {
+  generator_ = new Generators(seeds[seeds_index]);
+  seeds_index++; 
+  seeds_index %= 20;
 }
 
 ce_emergency_order::ce_emergency_order(BloodCentre* blood_centre, ::te_emergency_order_arrived* te_emergency_order_arrived) :
   blood_centre_(blood_centre), te_emergency_order_arrived_(te_emergency_order_arrived)
 {
+  generator_ = new Generators(seeds[seeds_index]);
+  seeds_index++ ;
+  seeds_index %= 20;
+
 }
 
 ce_research_level::ce_research_level(BloodCentre* blood_centre, te_research* te_research)  :
@@ -58,6 +66,7 @@ void ce_blood_transfusion::execute()
      blood_centre_->donate_blood();
      units_donated++;
    }
+   blood_centre_->stat_amount_of_blood_transfused += units_donated;
    std::cout << "\n" << blood_centre_->get_system_time() << ". " << units_donated << " units transfused. There are " << blood_centre_->get_amount_of_blood_in_depot() << " blood units in depot\n";
    if (blood_centre_->get_amount_of_blood_needed())
      std::cout << blood_centre_->get_system_time() << ". Patient still needs "<< blood_centre_->get_amount_of_blood_needed()<<" units\n";
@@ -83,11 +92,10 @@ void ce_normal_order::execute()     //schedule normal order, block future normal
   std::cout << "\n" << blood_centre_->get_system_time() << ". Normal order for blood units sent\n";
 
 
-  auto* generator = new Generators();
-  const auto time_from_rng = generator->exponential_distribution(blood_centre_->get_normal_order_avg_time());
+  blood_centre_->stat_normal_orders_sent++;
 
-  generator->~Generators();
-  
+  const auto time_from_rng = generator_->exponential_distribution(blood_centre_->get_normal_order_avg_time());
+
 
   te_normal_order_arrived_->schedule(blood_centre_->get_system_time()+time_from_rng);
 
@@ -107,10 +115,9 @@ void ce_emergency_order::execute()       //schedule emergency order, block futur
   std::cout << "\n" << blood_centre_->get_system_time() << ". Emergency order for blood units sent\n";
 
 
-  auto* generator = new Generators();
-  const auto time_from_rng = generator->normal_distribution(blood_centre_->get_emergency_order_avg_time(), blood_centre_->get_emergency_order_time_var());
+  blood_centre_->stat_emergency_orders_sent++;
+  const auto time_from_rng = generator_->normal_distribution(blood_centre_->get_emergency_order_avg_time(), blood_centre_->get_emergency_order_time_var());
 
-  generator->~Generators();
 
 
   te_emergency_order_arrived_->schedule(blood_centre_->get_system_time() + time_from_rng);

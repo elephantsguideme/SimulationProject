@@ -1,7 +1,7 @@
 #pragma once
 #include "Event.h"
 #include "BloodCentre.h"
-
+#include "Generators.h"
   
 /**** different time events which will/may occur during simulation*****/
 
@@ -37,6 +37,10 @@ public:
 
 private:
   int event_time_;
+  int random_seed_;
+
+  Generators* generator_;
+  Generators* generator2_;
 
  BloodCentre* blood_centre_;
  
@@ -59,7 +63,9 @@ public:
 
 private:
   int event_time_;
+  int random_seed_;
 
+  Generators* generator_;
   BloodCentre* blood_centre_;
   te_blood_expired* te_blood_expired_;
 
@@ -123,7 +129,9 @@ public:
 
 private:
   int event_time_;
+  int random_seed_;
 
+  Generators* generator_;
   BloodCentre * blood_centre_;
   te_blood_expired* te_blood_expired_;
 
