@@ -6,6 +6,8 @@
 BloodCentre::BloodCentre(const int r, const int n, const int z, const int t1, const int t2, const int p, const double w,
   const int e, const double ew2, const int q, const int l, const int tu, const int tb, const int jb_min, const int jb_max) :
 
+
+
   system_time_(0),
 
   kMinimumBloodLevel(r),
@@ -30,14 +32,19 @@ BloodCentre::BloodCentre(const int r, const int n, const int z, const int t1, co
   stat_amount_of_blood_destroyed(0),
   stat_amount_of_blood_used_for_research(0),
   stat_patients_arrived(0),
+  stat_patients_left(0),
   stat_donors_arrived(0),
   stat_max_number_of_patients_in_queue(0),
+  stat_total_time_spent_in_queue(0),
   stat_normal_orders_sent(0),
-  stat_emergency_orders_sent(0)
+  stat_emergency_orders_sent(0),
+  stat_last_emergency_order_sent(0)
 
 {
  
 }
+
+
 
 void BloodCentre::add_patient_to_queue(Patient* patient)
 {
@@ -58,8 +65,12 @@ void BloodCentre::add_blood_to_depot1(BloodUnit* blood_unit)
 
 void BloodCentre::add_blood_to_depot2(BloodUnit* blood_unit)
 {
+  
+
+  
   blood_depot2_.push(blood_unit);
   std::cout << get_system_time() << ". Blood added to the queue. There are " << blood_depot1_.size() + blood_depot2_.size() << " blood units in depot\n";
+  
 }
 
 int BloodCentre::get_blood_utilization_time()     //returns nearest time of blood utilization 
@@ -99,29 +110,47 @@ bool BloodCentre::is_queue_empty() const
 
 void BloodCentre::utilize_blood()      //destroys blood unit with lowest time_of_utilization value
 {
+  BloodUnit *temp;      //prevents memory leaks
 
   if (blood_depot1_.empty())
   {
+    temp = blood_depot2_.front();
+    
     blood_depot2_.pop();
+    delete temp;
     return;
   }
+
   if (blood_depot2_.empty())
   {
+    temp = blood_depot1_.front();
     blood_depot1_.pop();
+    delete temp;
     return;
   }
+
   if (blood_depot1_.front()->get_time_of_utilization() < blood_depot2_.front()->get_time_of_utilization())
   {
+    temp = blood_depot1_.front();
     blood_depot1_.pop();
+    delete temp;
     return;
-  }
+  }       
+
+  temp = blood_depot2_.front();
   blood_depot2_.pop();
+  delete temp;
   
 }
 
 void BloodCentre::remove_patient()
 {
+  stat_patients_left++;
+  auto *temp = patients_queue_.front();  //prevents memory leaks
+  stat_total_time_spent_in_queue += get_system_time() - temp->get_time_of_arrival();
   patients_queue_.pop();
+  delete temp;
+
   std::cout << get_system_time() << ". Patient removed from the queue. There are " << patients_queue_.size() << " patients in line\n";
 }
 
@@ -137,8 +166,10 @@ void BloodCentre::zero_all_stats()
     stat_amount_of_blood_destroyed = 0;
     stat_amount_of_blood_used_for_research = 0;
     stat_patients_arrived = 0;
+    stat_patients_left = 0;
     stat_donors_arrived = 0;
     stat_max_number_of_patients_in_queue = 0;
+    stat_total_time_spent_in_queue = 0;
     stat_normal_orders_sent = 0;
     stat_emergency_orders_sent = 0;
 }

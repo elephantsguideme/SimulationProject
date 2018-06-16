@@ -6,7 +6,7 @@ class BloodUnit
 public:
 
   BloodUnit(int time_of_utilization);
-  ~BloodUnit()=default;
+  ~BloodUnit()= default;
   int get_time_of_utilization() const
   {
     return time_of_utilization_;

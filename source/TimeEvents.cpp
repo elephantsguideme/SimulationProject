@@ -30,7 +30,7 @@ blood_centre_(blood_centre), te_blood_expired_(te_blood_expired), random_seed_(s
 {
   generator_ = new Generators(random_seed_);
   seeds_index++ ;
-  seeds_index %= 20;
+  
 }
 
 te_normal_order_arrived::te_normal_order_arrived(BloodCentre* blood_centre, te_blood_expired* te_blood_expired)    : event_time_(-1), blood_centre_(blood_centre), te_blood_expired_(te_blood_expired)
@@ -44,7 +44,7 @@ te_research::te_research(BloodCentre* blood_centre, te_blood_expired* te_blood_e
 {
   generator_ = new Generators(random_seed_);
   seeds_index++ ;
-  seeds_index %= 20;
+  
 }
 
 
@@ -57,9 +57,10 @@ void te_patient_arrival::execute() {        //Patient arrives, amount of blood n
   
   const auto amount_from_rng = generator_->geometric_distribution(blood_centre_->get_needed_blood_avg_amount());
   
-  const auto patient_new = new Patient(amount_from_rng);
+  const auto patient_new = new Patient(amount_from_rng, blood_centre_->get_system_time());
 
-  blood_centre_->stat_patients_arrived++;
+  blood_centre_->stat_patients_arrived++;
+
 
   
   std::cout << "\n" << blood_centre_->get_system_time()<<". New patient arrives\n";
@@ -94,8 +95,11 @@ void te_blood_donated::execute() {               //a blood unit is given, it's u
 
   auto* blood_unit = new BloodUnit(blood_centre_->get_expiration_time2() +blood_centre_->get_system_time());
   std::cout << blood_centre_->get_system_time() << ". Unused unit will get utilized at "<< blood_centre_->get_expiration_time2() + blood_centre_->get_system_time()<<"\n";
+  
   blood_centre_->add_blood_to_depot2(blood_unit);
+ 
   te_blood_expired_->schedule();
+ 
 
 
  

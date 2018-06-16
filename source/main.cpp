@@ -17,7 +17,7 @@ int main()
   /*const int t1=300;  const int t2=500;  const int q = 12; const int tb = 30;*/          //values from assignment
   const int z = 2000; const int t1 = 6000; const int t2 = 10000; const int p = 300;
   const double w = 0.19; const int e = 600; const double ew2 = 0.1; const int q = 50;   const int l = 800; // const int l = 800;
-  
+
   const int tu = 300;
 
   const int tb = 210; const int jb_min = 5; const int jb_max = 10;
@@ -25,10 +25,10 @@ int main()
 
   //initializing main object which contains all elements of the system
   auto* blood_centre = new BloodCentre(r,n,z,t1,t2,p,w,e,ew2,q,l,tu,tb,jb_min,jb_max);
-  
-   
 
-  
+
+
+
                            //initializing time and conditional events
   auto* blood_expired = new te_blood_expired(blood_centre);
   auto* patient_arrival = new te_patient_arrival(blood_centre);
@@ -45,16 +45,15 @@ int main()
 
   blood_donated->execute();      //first donor and patient arrive
   patient_arrival->execute();
-        
 
-      unsigned int command=1;      //number of simulation loops, 0 escapes main loop, 1 makes simulation work in step mode,
-                                   //high number (e.g. 500) makes it flow  continuously
-      
+
+      unsigned int command=1;
+
       int number_of_steps=2000;
       int beginning_phase = 500;
 
   for(int i=0; i<number_of_steps; i++ )       {    //main loop
-                                         //program goes through loop 'number_of_steps' times, statistics ignore first 'beginning_phase' iterations 
+                                         //program goes through loop 'number_of_steps' times, statistics ignore first 'beginning_phase' iterations
 
     //checking time events
     if (blood_centre->get_system_time() == patient_arrival->get_event_time())patient_arrival->execute();
@@ -63,7 +62,7 @@ int main()
     if (blood_centre->get_system_time() == emergency_order_arrived->get_event_time())emergency_order_arrived->execute();
 
     //checking contitional events
-    bool change;     
+    bool change;
     do{
       change = false;
       if (blood_transfusion->condition_met()) {
@@ -83,7 +82,7 @@ int main()
         change = true;
       }
 
-    } while (change);    //this is to prevent updating system time as long as conditional events are being executed 
+    } while (change);    //this is to prevent updating system time as long as conditional events are being executed
 
     //checking time events which "should be checked last"
     if (blood_centre->get_system_time() == research->get_event_time())research->execute();
@@ -94,19 +93,23 @@ int main()
     if (patient_arrival->get_event_time() < new_event_time) new_event_time = patient_arrival->get_event_time();
     if (blood_donated->get_event_time() < new_event_time) new_event_time = blood_donated->get_event_time();
     if (blood_expired->get_event_time() < new_event_time && blood_expired->get_event_time()>0) new_event_time = blood_expired->get_event_time();
-    if (normal_order_arrived->get_event_time() < new_event_time  && normal_order_arrived->get_event_time()>0)new_event_time = normal_order_arrived->get_event_time();
-    if (emergency_order_arrived->get_event_time() < new_event_time  && emergency_order_arrived->get_event_time()>0)new_event_time = emergency_order_arrived->get_event_time();
+   if (normal_order_arrived->get_event_time() < new_event_time  && normal_order_arrived->get_event_time()>0)new_event_time = normal_order_arrived->get_event_time();
+   if (emergency_order_arrived->get_event_time() < new_event_time  && emergency_order_arrived->get_event_time()>0)new_event_time = emergency_order_arrived->get_event_time();
     if (research->get_event_time() < new_event_time  && research->get_event_time()>0)new_event_time = research->get_event_time();
 
-    
-    blood_centre->set_system_time(new_event_time);  
-    
+
+    blood_centre->set_system_time(new_event_time);
+
     if (i == beginning_phase)blood_centre->zero_all_stats();
-    
+
      }
  std::cout << "\n\nStatistics\n";
  std::cout << "number of patients arrived - " << blood_centre->stat_patients_arrived <<"\n";
+ std::cout << "number of patients cured - " << blood_centre->stat_patients_left << "\n";
  std::cout << "maximum number of patients in queue - " << blood_centre->stat_max_number_of_patients_in_queue << "\n";
+ double time = blood_centre->stat_total_time_spent_in_queue;
+ time /= blood_centre->stat_patients_left;
+ std::cout << "average time spent in queue - " << time << "\n";
  std::cout << "number of donors arrived - " << blood_centre->stat_donors_arrived << "\n\n";
 
  std::cout << "number of blood units transfused - " << blood_centre->stat_amount_of_blood_transfused << "\n";
@@ -124,7 +127,7 @@ int main()
 
 
 
- 
+
  std::cin >> command;
 
               //destructors
@@ -139,6 +142,8 @@ int main()
     normal_order ->~ce_normal_order();
     emergency_order ->~ce_emergency_order();
     research_level ->~ce_research_level();
+
+    blood_centre -> ~BloodCentre();
     return 0;
 }
 

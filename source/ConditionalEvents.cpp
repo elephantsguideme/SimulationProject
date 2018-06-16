@@ -116,9 +116,9 @@ void ce_emergency_order::execute()       //schedule emergency order, block futur
 
 
   blood_centre_->stat_emergency_orders_sent++;
+  blood_centre_->stat_last_emergency_order_sent = blood_centre_->get_system_time();
+
   const auto time_from_rng = generator_->normal_distribution(blood_centre_->get_emergency_order_avg_time(), blood_centre_->get_emergency_order_time_var());
-
-
 
   te_emergency_order_arrived_->schedule(blood_centre_->get_system_time() + time_from_rng);
 

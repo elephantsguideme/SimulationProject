@@ -64,12 +64,17 @@ public:
   int stat_amount_of_blood_used_for_research;
       
   int stat_patients_arrived;
+  int stat_patients_left;
   int stat_donors_arrived;
   int stat_max_number_of_patients_in_queue;
+  int stat_total_time_spent_in_queue;
   int stat_normal_orders_sent;
   int stat_emergency_orders_sent;
+
+  int stat_last_emergency_order_sent;
   
   void zero_all_stats();
+
 
 private:
   int system_time_; // absolute system time (in "arbitrary time units")
