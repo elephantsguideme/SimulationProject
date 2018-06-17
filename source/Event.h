@@ -5,7 +5,7 @@
 class Event
 {
 public:
-  virtual void execute() = 0;  //will be overridden 
+  virtual void Execute() = 0;  //will be overridden 
   Event() = default;
   virtual ~Event() = default;
 };

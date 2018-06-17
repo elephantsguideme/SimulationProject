@@ -3,10 +3,10 @@
 #include <fstream>
 #include <random>
 #include <cstdio>
-#include "BloodCentre.h"
-#include "TimeEvents.h"
-#include "ConditionalEvents.h"
-#include "Generators.h"
+#include "blood_centre.h"
+#include "time_events.h"
+#include "conditional_events.h"
+#include "generators.h"
 
 
 int main()
@@ -30,21 +30,21 @@ int main()
 
 
                            //initializing time and conditional events
-  auto* blood_expired = new te_blood_expired(blood_centre);
-  auto* patient_arrival = new te_patient_arrival(blood_centre);
-  auto* blood_donated = new te_blood_donated(blood_centre, blood_expired);
-  auto* normal_order_arrived = new te_normal_order_arrived(blood_centre, blood_expired);
-  auto* emergency_order_arrived = new te_emergency_order_arrived(blood_centre, blood_expired);
-  auto* research = new te_research(blood_centre, blood_expired);
+  auto* blood_expired = new TimeEventBloodExpired(blood_centre);
+  auto* patient_arrival = new TimeEventPatientArrival(blood_centre);
+  auto* blood_donated = new TimeEventBloodDonated(blood_centre, blood_expired);
+  auto* normal_order_arrived = new TimeEventNormalOrderArrived(blood_centre, blood_expired);
+  auto* emergency_order_arrived = new TimeEventEmergencyOrderArrived(blood_centre, blood_expired);
+  auto* research = new TimeEventResearch(blood_centre, blood_expired);
 
-  auto* blood_transfusion = new ce_blood_transfusion(blood_centre, blood_expired);
-  auto* normal_order = new ce_normal_order(blood_centre, normal_order_arrived);
-  auto* emergency_order = new ce_emergency_order(blood_centre, emergency_order_arrived);
-  auto* research_level = new ce_research_level(blood_centre, research);
+  auto* blood_transfusion = new ConditionalEventBloodTransfusion(blood_centre, blood_expired);
+  auto* normal_order = new ConditionalEventNormalOrder(blood_centre, normal_order_arrived);
+  auto* emergency_order = new ConditionalEventEmergencyOrder(blood_centre, emergency_order_arrived);
+  auto* research_level = new ConditionalEventResearchLevel(blood_centre, research);
 
 
-  blood_donated->execute();      //first donor and patient arrive
-  patient_arrival->execute();
+  blood_donated->Execute();      //first donor and patient arrive
+  patient_arrival->Execute();
 
 
       unsigned int command=1;
@@ -56,37 +56,37 @@ int main()
                                          //program goes through loop 'number_of_steps' times, statistics ignore first 'beginning_phase' iterations
 
     //checking time events
-    if (blood_centre->get_system_time() == patient_arrival->get_event_time())patient_arrival->execute();
-    if (blood_centre->get_system_time() == blood_donated->get_event_time())blood_donated->execute();
-    if (blood_centre->get_system_time() == normal_order_arrived->get_event_time())normal_order_arrived->execute();
-    if (blood_centre->get_system_time() == emergency_order_arrived->get_event_time())emergency_order_arrived->execute();
+    if (blood_centre->get_system_time() == patient_arrival->get_event_time())patient_arrival->Execute();
+    if (blood_centre->get_system_time() == blood_donated->get_event_time())blood_donated->Execute();
+    if (blood_centre->get_system_time() == normal_order_arrived->get_event_time())normal_order_arrived->Execute();
+    if (blood_centre->get_system_time() == emergency_order_arrived->get_event_time())emergency_order_arrived->Execute();
 
     //checking contitional events
     bool change;
     do{
       change = false;
-      if (blood_transfusion->condition_met()) {
-        blood_transfusion->execute();
+      if (blood_transfusion->ConditionMet()) {
+        blood_transfusion->Execute();
         change = true;
       }
-      if (normal_order->condition_met()) {
-        normal_order->execute();
+      if (normal_order->ConditionMet()) {
+        normal_order->Execute();
         change = true;
       }
-      if (emergency_order->condition_met()) {
-        emergency_order->execute();
+      if (emergency_order->ConditionMet()) {
+        emergency_order->Execute();
         change = true;
       }
-      if (research_level->condition_met()) {
-        research_level->execute();
+      if (research_level->ConditionMet()) {
+        research_level->Execute();
         change = true;
       }
 
     } while (change);    //this is to prevent updating system time as long as conditional events are being executed
 
     //checking time events which "should be checked last"
-    if (blood_centre->get_system_time() == research->get_event_time())research->execute();
-    if (blood_centre->get_system_time() == blood_expired->get_event_time())blood_expired->execute();
+    if (blood_centre->get_system_time() == research->get_event_time())research->Execute();
+    if (blood_centre->get_system_time() == blood_expired->get_event_time())blood_expired->Execute();
 
 
     auto new_event_time = 0x7fffffff;           //updating the clock
@@ -100,7 +100,7 @@ int main()
 
     blood_centre->set_system_time(new_event_time);
 
-    if (i == beginning_phase)blood_centre->zero_all_stats();
+    if (i == beginning_phase)blood_centre->ZeroAllStats();
 
      }
  std::cout << "\n\nStatistics\n";
@@ -131,17 +131,17 @@ int main()
  std::cin >> command;
 
               //destructors
-    patient_arrival -> ~te_patient_arrival();
-    blood_donated  -> ~te_blood_donated();
-    blood_expired   -> ~te_blood_expired();
-    normal_order_arrived ->~te_normal_order_arrived();
-    emergency_order_arrived ->~te_emergency_order_arrived();
-    research-> ~te_research();
+    patient_arrival -> ~TimeEventPatientArrival();
+    blood_donated  -> ~TimeEventBloodDonated();
+    blood_expired   -> ~TimeEventBloodExpired();
+    normal_order_arrived ->~TimeEventNormalOrderArrived();
+    emergency_order_arrived ->~TimeEventEmergencyOrderArrived();
+    research-> ~TimeEventResearch();
 
-    blood_transfusion   -> ~ce_blood_transfusion();
-    normal_order ->~ce_normal_order();
-    emergency_order ->~ce_emergency_order();
-    research_level ->~ce_research_level();
+    blood_transfusion   -> ~ConditionalEventBloodTransfusion();
+    normal_order ->~ConditionalEventNormalOrder();
+    emergency_order ->~ConditionalEventEmergencyOrder();
+    research_level ->~ConditionalEventResearchLevel();
 
     blood_centre -> ~BloodCentre();
     return 0;

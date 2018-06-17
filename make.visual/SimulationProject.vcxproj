@@ -115,24 +115,24 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\source\BloodCentre.cpp" />
-    <ClCompile Include="..\source\BloodUnit.cpp" />
-    <ClCompile Include="..\source\ConditionalEvents.cpp" />
-    <ClCompile Include="..\source\Event.cpp" />
+    <ClCompile Include="..\source\blood_centre.cpp" />
+    <ClCompile Include="..\source\blood_unit.cpp" />
+    <ClCompile Include="..\source\conditional_events.cpp" />
+    <ClCompile Include="..\source\event.cpp" />
     <ClCompile Include="..\source\main.cpp" />
-    <ClCompile Include="..\source\Patient.cpp" />
+    <ClCompile Include="..\source\patient.cpp" />
     <ClCompile Include="..\source\seeds.cpp" />
-    <ClCompile Include="..\source\TimeEvents.cpp" />
-    <ClCompile Include="..\source\Generators.cpp" />
+    <ClCompile Include="..\source\time_events.cpp" />
+    <ClCompile Include="..\source\generators.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\source\BloodCentre.h" />
-    <ClInclude Include="..\source\BloodUnit.h" />
-    <ClInclude Include="..\source\ConditionalEvents.h" />
-    <ClInclude Include="..\source\Event.h" />
-    <ClInclude Include="..\source\Patient.h" />
-    <ClInclude Include="..\source\TimeEvents.h" />
-    <ClInclude Include="..\source\Generators.h" />
+    <ClInclude Include="..\source\blood_centre.h" />
+    <ClInclude Include="..\source\blood_unit.h" />
+    <ClInclude Include="..\source\conditional_events.h" />
+    <ClInclude Include="..\source\event.h" />
+    <ClInclude Include="..\source\patient.h" />
+    <ClInclude Include="..\source\time_events.h" />
+    <ClInclude Include="..\source\generators.h" />
     <ClInclude Include="..\source\seeds.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -9,19 +9,19 @@ public:
 
   ~Generators()=default;
 
-  double uniform_01_distribution();
-  double normal_01_distribution();
+  double Uniform01Distribution();
+  double Normal01Distribution();
 
-  int get_seed() const { return seed_; };
+  int get_seed() const { return seed_; }
 
-   int exponential_distribution(int avg_value) ;
-   int geometric_distribution(double avg_value) ;
-  int normal_distribution(int avg_value, double variance) ;
-  int uniform_distribution(int lower_limit, int upper_limit);
+   int ExponentialDistribution(int avg_value) ;
+   int GeometricDistribution(double avg_value) ;
+  int NormalDistribution(int avg_value, double variance) ;
+  int UniformDistribution(int lower_limit, int upper_limit);
 
 private:
   long long int seed_;
-  const int m = 0x7fffffff;
-  const int a = 16807;
+  const int m_ = 0x7fffffff;
+  const int a_ = 16807;
 };
 

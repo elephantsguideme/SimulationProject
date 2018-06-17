@@ -1,5 +1,5 @@
 #pragma once
-//#include "TimeEvents.h"
+//#include "time_events.h"
 
 class BloodUnit
 {
@@ -10,10 +10,10 @@ public:
   int get_time_of_utilization() const
   {
     return time_of_utilization_;
-  };
+  }
 private:
   const int time_of_utilization_;
 
   //TeBloodExpired* te_expire; // this unit's projected destruction event 
-};
+};                                                                                    
 

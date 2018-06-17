@@ -3,8 +3,8 @@
 #include <vector>
 #include <queue>
 
-#include "BloodUnit.h"
-#include "Patient.h"
+#include "blood_unit.h"
+#include "patient.h"
 
 
 
@@ -18,30 +18,31 @@ public:
   ~BloodCentre()=default;        
 
                                 //getters
-  int get_system_time() const { return system_time_; };
+  int get_system_time() const { return system_time_; }
 
-  int get_patients_avg_time() const { return kPatientsAvgTime; };
-  int get_expiration_time1() const { return kExpirationTime1; };
-  int get_expiration_time2() const { return kExpirationTime2; };
-  double get_needed_blood_avg_amount() const { return kNeededBloodAvgAmount; };
-  int get_donors_avg_time() const { return kDonorsAvgTime; };
-  int get_blood_utilization_time();
-  int get_amount_of_blood_in_depot() const;
-  int get_amount_of_blood_needed();
-  bool is_queue_empty() const;
-  bool get_order_flag(bool emergency) const;
-  int get_minimum_blood_level() const { return kMinimumBloodLevel; };
-  int get_normal_order_amount()const { return kNormalOrderAmount; };
-  int get_normal_order_avg_time()const { return kNormalOrderAvgTime; };
-  int get_emergency_order_amount()const { return kEmergencyOrderAmount; };
-  int get_emergency_order_avg_time()const { return kEmergencyOrderAvgTime; };
-  double get_emergency_order_time_var()const { return kEmergencyOrderTimeVar; };
+  int get_patients_avg_time() const { return kPatientsAvgTime; }
+  int get_expiration_time1() const { return kExpirationTime1; }
+  int get_expiration_time2() const { return kExpirationTime2; }
+  double get_needed_blood_avg_amount() const { return kNeededBloodAvgAmount; }
+  int get_donors_avg_time() const { return kDonorsAvgTime; }
+  int get_minimum_blood_level() const { return kMinimumBloodLevel; }
+  int get_normal_order_amount()const { return kNormalOrderAmount; }
+  int get_normal_order_avg_time()const { return kNormalOrderAvgTime; }
+  int get_emergency_order_amount()const { return kEmergencyOrderAmount; }
+  int get_emergency_order_avg_time()const { return kEmergencyOrderAvgTime; }
+  double get_emergency_order_time_var()const { return kEmergencyOrderTimeVar; }
 
-   int get_time_to_research()const { return kTimeToResearch; };
-   int get_level_to_research()const { return kLevelToResearch; };
-   int get_min_to_research()const { return kMinAmountToResearch; };
-   int get_max_to_research()const { return kMaxAmountToResearch; };
-   bool get_research_flag() const { return research_flag_; };
+   int get_time_to_research()const { return kTimeToResearch; }
+   int get_level_to_research()const { return kLevelToResearch; }
+   int get_min_to_research()const { return kMinAmountToResearch; }
+   int get_max_to_research()const { return kMaxAmountToResearch; }
+   bool get_research_flag() const { return research_flag_; }
+
+   int BloodUtilizationTime() const;
+   int AmountOfBloodInDepot() const;
+   int AmountOfBloodNeeded() const;
+   bool QueueEmpty() const;
+   bool OrderFlag(bool emergency) const;
 
               //setters
   void set_system_time(const int next_system_time) { system_time_ = next_system_time; };
@@ -49,13 +50,13 @@ public:
   void set_research_flag(const bool value) { research_flag_=value ; };
 
   //other functions
-  void add_patient_to_queue(Patient* patient);
-  void add_blood_to_depot1(BloodUnit* blood_unit);
-  void add_blood_to_depot2(BloodUnit* blood_unit);
+  void AddPatientToQueue(Patient* patient);
+  void AddBloodToDepot1(BloodUnit* blood_unit);
+  void AddBloodToDepot2(BloodUnit* blood_unit);
   
-  void utilize_blood();
-  void remove_patient();
-  void donate_blood();
+  void UtilizeBlood();
+  void RemovePatient();
+  void DonateBlood();
  
 
   //statistics
@@ -73,7 +74,7 @@ public:
 
   int stat_last_emergency_order_sent;
   
-  void zero_all_stats();
+  void ZeroAllStats();
 
 
 private:

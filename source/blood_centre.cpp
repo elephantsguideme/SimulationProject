@@ -1,5 +1,5 @@
 
-#include "BloodCentre.h"
+#include "blood_centre.h"
 #include <iostream>
  
 
@@ -46,7 +46,7 @@ BloodCentre::BloodCentre(const int r, const int n, const int z, const int t1, co
 
 
 
-void BloodCentre::add_patient_to_queue(Patient* patient)
+void BloodCentre::AddPatientToQueue(Patient* patient)
 {
   patients_queue_.push(patient);
   std::cout << get_system_time()<<". Patient added to the queue. There are "<< patients_queue_.size() <<" patients in line\n";
@@ -56,14 +56,14 @@ void BloodCentre::add_patient_to_queue(Patient* patient)
   
 }
 
-void BloodCentre::add_blood_to_depot1(BloodUnit* blood_unit)
+void BloodCentre::AddBloodToDepot1(BloodUnit* blood_unit)
 {
   blood_depot1_.push(blood_unit);
   //std::cout << get_system_time() << ". Blood added to the queue. There are " << blood_depot1_.size()+blood_depot2_.size() << " blood units in depot\n";
 
 }
 
-void BloodCentre::add_blood_to_depot2(BloodUnit* blood_unit)
+void BloodCentre::AddBloodToDepot2(BloodUnit* blood_unit)
 {
   
 
@@ -73,7 +73,7 @@ void BloodCentre::add_blood_to_depot2(BloodUnit* blood_unit)
   
 }
 
-int BloodCentre::get_blood_utilization_time()     //returns nearest time of blood utilization 
+int BloodCentre::BloodUtilizationTime() const    //returns nearest time of blood utilization 
 {
    if(blood_depot1_.empty())
    {
@@ -92,23 +92,23 @@ int BloodCentre::get_blood_utilization_time()     //returns nearest time of bloo
   return(blood_depot2_.front()->get_time_of_utilization());
 }
 
-int BloodCentre::get_amount_of_blood_in_depot() const
+int BloodCentre::AmountOfBloodInDepot() const
 {
   return  blood_depot1_.size() + blood_depot2_.size();
 }
 
-int BloodCentre::get_amount_of_blood_needed()
+int BloodCentre::AmountOfBloodNeeded()  const
 {
   if (!patients_queue_.empty())return patients_queue_.front()->get_amount_of_blood();
   return 0;
 }
 
-bool BloodCentre::is_queue_empty() const
+bool BloodCentre::QueueEmpty() const
 {
   return patients_queue_.empty();
 }
 
-void BloodCentre::utilize_blood()      //destroys blood unit with lowest time_of_utilization value
+void BloodCentre::UtilizeBlood()      //destroys blood unit with lowest time_of_utilization value
 {
   BloodUnit *temp;      //prevents memory leaks
 
@@ -143,7 +143,7 @@ void BloodCentre::utilize_blood()      //destroys blood unit with lowest time_of
   
 }
 
-void BloodCentre::remove_patient()
+void BloodCentre::RemovePatient()
 {
   stat_patients_left++;
   auto *temp = patients_queue_.front();  //prevents memory leaks
@@ -154,13 +154,13 @@ void BloodCentre::remove_patient()
   std::cout << get_system_time() << ". Patient removed from the queue. There are " << patients_queue_.size() << " patients in line\n";
 }
 
-void BloodCentre::donate_blood()
+void BloodCentre::DonateBlood()
 {
-  patients_queue_.front()->donate_blood();
+  patients_queue_.front()->DonateBlood();
 
 }
 
-void BloodCentre::zero_all_stats()
+void BloodCentre::ZeroAllStats()
 {
   stat_amount_of_blood_transfused = 0;
     stat_amount_of_blood_destroyed = 0;
@@ -174,7 +174,7 @@ void BloodCentre::zero_all_stats()
     stat_emergency_orders_sent = 0;
 }
 
-bool BloodCentre::get_order_flag(const bool emergency) const        //if flag is set then the order is due
+bool BloodCentre::OrderFlag(const bool emergency) const        //if flag is set then the order is due
                                                                     // if emergency = false then it is asking about normal order
 {
   if (emergency)return emergency_order_flag_;
