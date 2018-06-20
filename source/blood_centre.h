@@ -7,7 +7,7 @@
 #include "patient.h"
 
 
-
+extern bool data_in_console;
 
 class BloodCentre
 {
@@ -41,6 +41,7 @@ public:
    int BloodUtilizationTime() const;
    int AmountOfBloodInDepot() const;
    int AmountOfBloodNeeded() const;
+   int PatientsInQueue() const;
    bool QueueEmpty() const;
    bool OrderFlag(bool emergency) const;
 
@@ -74,7 +75,13 @@ public:
 
   int stat_last_emergency_order_sent;
   
+  double AverageTimeInQueue();
+  double UsedBloodRatio();
+  double EmergencyOrdersRatio();
+  int TimeSinceLastEmergencySent();
   void ZeroAllStats();
+
+
 
 
 private:

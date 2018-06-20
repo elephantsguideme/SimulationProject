@@ -2,4 +2,4 @@
 
 extern int seeds_index;
 
-extern int seeds[20];
+extern int seeds[200];

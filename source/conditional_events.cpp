@@ -56,7 +56,7 @@ void ConditionalEventBloodTransfusion::Execute()
   {
     blood_centre->utilize_blood();
   }             
-  std::cout <<  blood_centre->get_system_time() << ". " << amount_of_blood_needed << " units transfused. There are " << blood_centre->get_amount_of_blood_in_depot() << " blood units in depot\n";
+  if(data_in_console) std::cout <<  blood_centre->get_system_time() << ". " << amount_of_blood_needed << " units transfused. There are " << blood_centre->get_amount_of_blood_in_depot() << " blood units in depot\n";
   blood_centre->remove_patient();  */
   auto units_donated = 0;    
    while(blood_centre_->AmountOfBloodNeeded() && blood_centre_->AmountOfBloodInDepot())
@@ -67,9 +67,10 @@ void ConditionalEventBloodTransfusion::Execute()
      units_donated++;
    }
    blood_centre_->stat_amount_of_blood_transfused += units_donated;
-   std::cout << "\n" << blood_centre_->get_system_time() << ". " << units_donated << " units transfused. There are " << blood_centre_->AmountOfBloodInDepot() << " blood units in depot\n";
-   if (blood_centre_->AmountOfBloodNeeded())
-     std::cout << blood_centre_->get_system_time() << ". Patient still needs "<< blood_centre_->AmountOfBloodNeeded()<<" units\n";
+   if(data_in_console) std::cout << "\n" << blood_centre_->get_system_time() << ". " << units_donated << " units transfused. There are " << blood_centre_->AmountOfBloodInDepot() << " blood units in depot\n";
+   if (blood_centre_->AmountOfBloodNeeded()){
+     if(data_in_console) std::cout << blood_centre_->get_system_time() << ". Patient still needs "<< blood_centre_->AmountOfBloodNeeded()<<" units\n";
+   }
    else    {
   
   blood_centre_->RemovePatient();
@@ -89,7 +90,7 @@ bool ConditionalEventNormalOrder::ConditionMet() const
                   
 void ConditionalEventNormalOrder::Execute()     //schedule normal order, block future normal orders
 {
-  std::cout << "\n" << blood_centre_->get_system_time() << ". Normal order for blood units sent\n";
+  if(data_in_console) std::cout << "\n" << blood_centre_->get_system_time() << ". Normal order for blood units sent\n";
 
 
   blood_centre_->stat_normal_orders_sent++;
@@ -112,7 +113,7 @@ bool ConditionalEventEmergencyOrder::ConditionMet() const
 
 void ConditionalEventEmergencyOrder::Execute()       //schedule emergency order, block future emergency orders
 {
-  std::cout << "\n" << blood_centre_->get_system_time() << ". Emergency order for blood units sent\n";
+  if(data_in_console) std::cout << "\n" << blood_centre_->get_system_time() << ". Emergency order for blood units sent\n";
 
 
   blood_centre_->stat_emergency_orders_sent++;
@@ -133,7 +134,7 @@ bool ConditionalEventResearchLevel::ConditionMet() const
   {
     if (blood_centre_->AmountOfBloodInDepot() <= blood_centre_->get_level_to_research()) 
     {       
-      std::cout << "\n" << blood_centre_->get_system_time() << ". There is no longer enough blood for research\n";
+      if(data_in_console) std::cout << "\n" << blood_centre_->get_system_time() << ". There is no longer enough blood for research\n";
       te_research_->schedule(-1);
       blood_centre_->set_research_flag(false);      
     }

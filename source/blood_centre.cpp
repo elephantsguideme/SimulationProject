@@ -2,6 +2,8 @@
 #include "blood_centre.h"
 #include <iostream>
  
+bool data_in_console;
+
 
 BloodCentre::BloodCentre(const int r, const int n, const int z, const int t1, const int t2, const int p, const double w,
   const int e, const double ew2, const int q, const int l, const int tu, const int tb, const int jb_min, const int jb_max) :
@@ -49,7 +51,7 @@ BloodCentre::BloodCentre(const int r, const int n, const int z, const int t1, co
 void BloodCentre::AddPatientToQueue(Patient* patient)
 {
   patients_queue_.push(patient);
-  std::cout << get_system_time()<<". Patient added to the queue. There are "<< patients_queue_.size() <<" patients in line\n";
+  if(data_in_console) std::cout << get_system_time()<<". Patient added to the queue. There are "<< patients_queue_.size() <<" patients in line\n";
   if (patients_queue_.size() > stat_max_number_of_patients_in_queue)   stat_max_number_of_patients_in_queue = patients_queue_.size();
   
 
@@ -59,7 +61,7 @@ void BloodCentre::AddPatientToQueue(Patient* patient)
 void BloodCentre::AddBloodToDepot1(BloodUnit* blood_unit)
 {
   blood_depot1_.push(blood_unit);
-  //std::cout << get_system_time() << ". Blood added to the queue. There are " << blood_depot1_.size()+blood_depot2_.size() << " blood units in depot\n";
+  //if(data_in_console) std::cout << get_system_time() << ". Blood added to the queue. There are " << blood_depot1_.size()+blood_depot2_.size() << " blood units in depot\n";
 
 }
 
@@ -69,7 +71,7 @@ void BloodCentre::AddBloodToDepot2(BloodUnit* blood_unit)
 
   
   blood_depot2_.push(blood_unit);
-  std::cout << get_system_time() << ". Blood added to the queue. There are " << blood_depot1_.size() + blood_depot2_.size() << " blood units in depot\n";
+  if(data_in_console) std::cout << get_system_time() << ". Blood added to the queue. There are " << blood_depot1_.size() + blood_depot2_.size() << " blood units in depot\n";
   
 }
 
@@ -101,6 +103,11 @@ int BloodCentre::AmountOfBloodNeeded()  const
 {
   if (!patients_queue_.empty())return patients_queue_.front()->get_amount_of_blood();
   return 0;
+}
+
+int BloodCentre::PatientsInQueue() const
+{
+  return patients_queue_.size();
 }
 
 bool BloodCentre::QueueEmpty() const
@@ -151,13 +158,43 @@ void BloodCentre::RemovePatient()
   patients_queue_.pop();
   delete temp;
 
-  std::cout << get_system_time() << ". Patient removed from the queue. There are " << patients_queue_.size() << " patients in line\n";
+  if(data_in_console) std::cout << get_system_time() << ". Patient removed from the queue. There are " << patients_queue_.size() << " patients in line\n";
 }
 
 void BloodCentre::DonateBlood()
 {
   patients_queue_.front()->DonateBlood();
 
+}
+
+double BloodCentre::AverageTimeInQueue()
+{
+  double time = stat_total_time_spent_in_queue;
+  if (stat_patients_left) time /= stat_patients_left; // "if" to prevent division by zero
+  return time;
+}
+
+double BloodCentre::UsedBloodRatio()
+{
+  
+
+  double ratio = stat_amount_of_blood_transfused + stat_amount_of_blood_used_for_research;
+  if (stat_amount_of_blood_transfused + stat_amount_of_blood_used_for_research)ratio /= ratio + stat_amount_of_blood_destroyed;   // "if" to prevent division by zero
+  return ratio;
+}
+
+double BloodCentre::EmergencyOrdersRatio()
+{
+
+   
+  double ratio = stat_emergency_orders_sent;
+  if (stat_normal_orders_sent) ratio /= ratio + stat_normal_orders_sent; // "if" to prevent division by zero
+  return ratio;
+}
+
+int BloodCentre::TimeSinceLastEmergencySent()
+{
+  return get_system_time()-stat_last_emergency_order_sent;
 }
 
 void BloodCentre::ZeroAllStats()
